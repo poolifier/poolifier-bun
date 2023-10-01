@@ -17,16 +17,16 @@ dependencies:
 
 devDependencies:
   '@types/node':
-    specifier: ^20.7.2
-    version: 20.7.2
+    specifier: ^20.8.0
+    version: 20.8.0
   typescript:
     specifier: ^5.2.2
     version: 5.2.2
 
 packages:
 
-  /@types/node@20.7.2:
-    resolution: {integrity: sha512-RcdC3hOBOauLP+r/kRt27NrByYtDjsXyAuSbR87O6xpsvi763WI+5fbSIvYJrXnt9w4RuxhV6eAXfIs7aaf/FQ==}
+  /@types/node@20.8.0:
+    resolution: {integrity: sha512-LzcWltT83s1bthcvjBmiBvGJiiUe84NWRHkw+ZV6Fr41z2FbIzvc815dk2nQ3RAKMuN2fkenM/z3Xv2QzEpYxQ==}
     dev: true
 
   /asynckit@0.4.0:
