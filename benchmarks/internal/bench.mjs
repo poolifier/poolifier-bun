@@ -2,7 +2,7 @@ import {
   PoolTypes,
   WorkerTypes,
   availableParallelism
-} from '../../lib/index.mjs'
+} from '../../lib/index.js'
 import { TaskFunctions } from '../benchmarks-types.js'
 import {
   buildPoolifierPool,

@@ -3,8 +3,7 @@ const { defineConfig } = require('eslint-define-config')
 module.exports = defineConfig({
   root: true,
   env: {
-    es2022: true,
-    mocha: true
+    es2022: true
   },
   parserOptions: {
     ecmaVersion: 2022,

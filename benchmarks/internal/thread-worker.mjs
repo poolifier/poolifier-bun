@@ -1,5 +1,5 @@
 import { isMainThread } from 'node:worker_threads'
-import { ThreadWorker } from '../../lib/index.mjs'
+import { ThreadWorker } from '../../lib/index.js'
 import { executeTaskFunction } from '../benchmarks-utils.js'
 import { TaskFunctions } from '../benchmarks-types.js'
 
