@@ -150,10 +150,7 @@ module.exports = defineConfig({
     {
       files: ['tests/**/*.js', 'tests/**/*.mjs'],
       rules: {
-        'jsdoc/require-jsdoc': 'off',
-        // TODO: remove when tests are migrated to `bun test`
-        'import/no-unresolved': 'off',
-        'n/no-missing-import': 'off'
+        'jsdoc/require-jsdoc': 'off'
       }
     },
     {
