@@ -12,7 +12,7 @@
     }
   },
   "scripts": {
-    "prepare": "bun prepare.js",
+    "prepare": "bun prepare.mjs",
     "build": "bun x rimraf ./lib && bun build ./src/index.ts --outdir ./lib --target=bun --format=esm --sourcemap=external",
     "build:prod": "bun x rimraf ./lib && bun build ./src/index.ts --outdir ./lib --target=bun --format=esm --minify --sourcemap=external",
     "benchmark": "bun run build && bun benchmarks/internal/bench.mjs",

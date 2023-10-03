@@ -1,4 +1,4 @@
-# [API](https://poolifier.github.io/poolifier/)
+# [API](https://poolifier.github.io/poolifier-bun/)
 
 ## Table of contents
 
