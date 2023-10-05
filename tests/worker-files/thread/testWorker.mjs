@@ -1,6 +1,6 @@
 import { KillBehaviors, ThreadWorker } from '../../../lib/index.js'
-import { executeTaskFunction } from '../../test-utils.js'
-import { TaskFunctions } from '../../test-types.js'
+import { executeTaskFunction } from '../../test-utils.mjs'
+import { TaskFunctions } from '../../test-types.mjs'
 
 /**
  *

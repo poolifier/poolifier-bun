@@ -4,8 +4,8 @@ import {
   FixedThreadPool,
   PoolEvents
 } from '../../../lib/index.js'
-import { TaskFunctions } from '../../test-types.js'
-import { waitPoolEvents, waitWorkerEvents } from '../../test-utils.js'
+import { TaskFunctions } from '../../test-types.mjs'
+import { waitPoolEvents, waitWorkerEvents } from '../../test-utils.mjs'
 
 describe('Fixed thread pool test suite', () => {
   const numberOfThreads = 6
@@ -341,7 +341,7 @@ describe('Fixed thread pool test suite', () => {
     await pool.destroy()
   })
 
-  test('Verify that a pool with zero worker fails', async () => {
+  test('Verify that a pool with zero worker fails', () => {
     expect(
       () => new FixedThreadPool(0, './tests/worker-files/thread/testWorker.mjs')
     ).toThrow('Cannot instantiate a fixed pool with zero worker')

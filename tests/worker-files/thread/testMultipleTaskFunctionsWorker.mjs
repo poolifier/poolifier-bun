@@ -3,7 +3,7 @@ import {
   factorial,
   fibonacci,
   jsonIntegerSerialization
-} from '../../test-utils.js'
+} from '../../test-utils.mjs'
 
 export default new ThreadWorker(
   {

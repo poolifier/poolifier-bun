@@ -1,5 +1,5 @@
 import { ThreadWorker } from '../../../lib/index.js'
-import { sleepTaskFunction } from '../../test-utils.js'
+import { sleepTaskFunction } from '../../test-utils.mjs'
 
 /**
  *

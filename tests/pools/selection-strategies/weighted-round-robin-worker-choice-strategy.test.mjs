@@ -3,7 +3,7 @@ import {
   FixedThreadPool,
   WeightedRoundRobinWorkerChoiceStrategy
 } from '../../../lib/index.js'
-import { generateRandomInteger } from '../../test-utils.js'
+import { generateRandomInteger } from '../../test-utils.mjs'
 
 describe('Weighted round robin strategy worker choice strategy test suite', () => {
   // const min = 1

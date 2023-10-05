@@ -15,7 +15,7 @@ import {
   WorkerNode,
   WorkerTypes
 } from '../../lib/index.js'
-import { waitPoolEvents } from '../test-utils.js'
+import { waitPoolEvents } from '../test-utils.mjs'
 
 describe('Abstract pool test suite', () => {
   const version = JSON.parse(

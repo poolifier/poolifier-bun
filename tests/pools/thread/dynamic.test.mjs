@@ -1,7 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { DynamicThreadPool, PoolEvents } from '../../../lib/index.js'
-import { TaskFunctions } from '../../test-types.js'
-import { sleep, waitWorkerEvents } from '../../test-utils.js'
+import { TaskFunctions } from '../../test-types.mjs'
+import { sleep, waitWorkerEvents } from '../../test-utils.mjs'
 
 describe('Dynamic thread pool test suite', () => {
   const min = 1

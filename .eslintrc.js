@@ -129,7 +129,7 @@ module.exports = defineConfig({
     {
       files: ['examples/typescript/**/*.ts'],
       rules: {
-        'import/no-unresolved': 'off',
+        'import/no-unresolved': ['error', { ignore: ['^poolifier$'] }],
         '@typescript-eslint/no-unsafe-argument': 'off',
         '@typescript-eslint/no-unsafe-call': 'off',
         '@typescript-eslint/no-unsafe-return': 'off',
@@ -149,6 +149,8 @@ module.exports = defineConfig({
     {
       files: ['tests/**/*.js', 'tests/**/*.mjs'],
       rules: {
+        'n/no-missing-import': 'off',
+        'import/no-unresolved': ['error', { ignore: ['^bun:test$'] }],
         'jsdoc/require-jsdoc': 'off'
       }
     },

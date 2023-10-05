@@ -174,7 +174,7 @@ describe('Abstract worker test suite', () => {
   test('Verify that async kill handler is called when worker is killed', () => {
     const killHandlerStub = mock(() => {})
     const worker = new ThreadWorker(() => {}, {
-      killHandler: async () => Promise.resolve(killHandlerStub())
+      killHandler: async () => await Promise.resolve(killHandlerStub())
     })
     worker.isMain = false
     worker.handleKillMessage()
