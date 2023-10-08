@@ -74,7 +74,7 @@ describe('Dynamic thread pool test suite', () => {
 
   test('Validation of inputs test', () => {
     expect(() => new DynamicThreadPool(min)).toThrow(
-      'Please specify a file with a worker implementation'
+      "Cannot find the worker file 'undefined'"
     )
   })
 

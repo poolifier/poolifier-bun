@@ -17,7 +17,6 @@ import {
   type WorkerInfo,
   type WorkerNodeEventCallback,
   type WorkerType,
-  WorkerTypes,
   type WorkerUsage
 } from './worker'
 import { checkWorkerNodeArguments } from './utils'
@@ -62,10 +61,8 @@ implements IWorkerNode<Worker, Data> {
     this.worker = worker
     this.info = this.initWorkerInfo(worker)
     this.usage = this.initWorkerUsage()
-    if (this.info.type === WorkerTypes.thread) {
-      this.messageChannel = new MessageChannel()
-      this.messageChannel.port1.start()
-    }
+    this.messageChannel = new MessageChannel()
+    this.messageChannel.port1.start()
     this.tasksQueueBackPressureSize = tasksQueueBackPressureSize
     this.tasksQueue = new Deque<Task<Data>>()
     this.onBackPressureStarted = false
