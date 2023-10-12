@@ -1210,8 +1210,8 @@ export abstract class AbstractPool<
       const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
       const workerInfo = this.getWorkerInfo(workerNodeKey)
       workerInfo.ready = false
-      this.workerNodes[workerNodeKey].closeChannel()
       this.emitter?.emit(PoolEvents.error, error)
+      this.workerNodes[workerNodeKey].terminate().catch(EMPTY_FUNCTION)
       if (
         this.started &&
         !this.starting &&

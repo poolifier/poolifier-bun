@@ -1464,6 +1464,7 @@ describe('Abstract pool test suite', () => {
       'jsonIntegerSerialization',
       'factorial'
     ])
+    await dynamicThreadPool.destroy()
   })
 
   test('Verify that multiple task functions worker is working', async () => {

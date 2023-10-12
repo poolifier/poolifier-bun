@@ -148,7 +148,7 @@ implements IWorkerNode<Worker, Data> {
   }
 
   /** @inheritdoc */
-  public closeChannel (): void {
+  public async terminate (): Promise<number> {
     if (this.messageChannel != null) {
       this.messageChannel?.port1.unref()
       this.messageChannel?.port2.unref()
@@ -156,6 +156,7 @@ implements IWorkerNode<Worker, Data> {
       this.messageChannel?.port2.close()
       delete this.messageChannel
     }
+    return await this.worker.terminate()
   }
 
   /** @inheritdoc */

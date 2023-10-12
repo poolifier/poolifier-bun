@@ -204,6 +204,10 @@ export interface IWorker {
    * @param handler - The exit handler.
    */
   readonly once: (event: 'exit', handler: ExitHandler<this>) => void
+  /**
+   * Terminates the worker.
+   */
+  terminate: () => Promise<number>
 }
 
 /**
@@ -303,9 +307,9 @@ export interface IWorkerNode<Worker extends IWorker, Data = unknown> {
    */
   readonly resetUsage: () => void
   /**
-   * Closes communication channel.
+   * Terminates the worker node.
    */
-  readonly closeChannel: () => void
+  readonly terminate: () => Promise<number>
   /**
    * Gets task function worker usage statistics.
    *
