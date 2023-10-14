@@ -1263,7 +1263,7 @@ describe('Abstract pool test suite', () => {
     await dynamicThreadPool.destroy()
     const fixedClusterPool = new FixedThreadPool(
       numberOfWorkers,
-      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.js'
+      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.mjs'
     )
     await waitPoolEvents(fixedClusterPool, PoolEvents.ready, 1)
     expect(fixedClusterPool.hasTaskFunction(DEFAULT_TASK_NAME)).toBe(true)
@@ -1402,7 +1402,7 @@ describe('Abstract pool test suite', () => {
     await dynamicThreadPool.destroy()
     const fixedClusterPool = new FixedThreadPool(
       numberOfWorkers,
-      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.js'
+      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.mjs'
     )
     await waitPoolEvents(fixedClusterPool, PoolEvents.ready, 1)
     expect(fixedClusterPool.listTaskFunctionNames()).toStrictEqual([
@@ -1471,7 +1471,7 @@ describe('Abstract pool test suite', () => {
     const pool = new DynamicThreadPool(
       Math.floor(numberOfWorkers / 2),
       numberOfWorkers,
-      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.js'
+      './tests/worker-files/thread/testMultipleTaskFunctionsWorker.mjs'
     )
     const data = { n: 10 }
     const result0 = await pool.execute(data)
