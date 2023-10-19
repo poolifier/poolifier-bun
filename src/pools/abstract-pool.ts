@@ -492,10 +492,7 @@ export abstract class AbstractPool<
   private checkMessageWorkerId (message: MessageValue<Data | Response>): void {
     if (message.workerId == null) {
       throw new Error('Worker message received without worker id')
-    } else if (
-      message.workerId != null &&
-      this.getWorkerNodeKeyByWorkerId(message.workerId) === -1
-    ) {
+    } else if (this.getWorkerNodeKeyByWorkerId(message.workerId) === -1) {
       throw new Error(
         `Worker message received from unknown worker '${message.workerId}'`
       )
@@ -1262,6 +1259,8 @@ export abstract class AbstractPool<
               workerUsage.tasks.executing === 0 &&
               this.tasksQueueSize(localWorkerNodeKey) === 0)))
       ) {
+        // Flag the worker node as not ready immediately
+        this.flagWorkerNodeAsNotReady(localWorkerNodeKey)
         this.destroyWorkerNode(localWorkerNodeKey).catch(error => {
           this.emitter?.emit(PoolEvents.error, error)
         })
@@ -1577,7 +1576,7 @@ export abstract class AbstractPool<
    * @returns The worker information.
    */
   protected getWorkerInfo (workerNodeKey: number): WorkerInfo {
-    return this.workerNodes[workerNodeKey].info
+    return this.workerNodes[workerNodeKey]?.info
   }
 
   /**
@@ -1609,12 +1608,16 @@ export abstract class AbstractPool<
    *
    * @param worker - The worker.
    */
-  private removeWorkerNode (worker: Worker): void {
+  protected removeWorkerNode (worker: Worker): void {
     const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
     if (workerNodeKey !== -1) {
       this.workerNodes.splice(workerNodeKey, 1)
       this.workerChoiceStrategyContext.remove(workerNodeKey)
     }
+  }
+
+  protected flagWorkerNodeAsNotReady (workerNodeKey: number): void {
+    this.getWorkerInfo(workerNodeKey).ready = false
   }
 
   /** @inheritDoc */

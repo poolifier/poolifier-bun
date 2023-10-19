@@ -6,9 +6,9 @@ Welcome to poolifier benchmarks and thanks to look into this project.
 
 The [internal](./internal) folder contains poolifier internal benchmark.
 
-## Poolifier benchmark versus other worker pools
+<!-- ## Poolifier benchmark versus other worker pools
 
-To compare poolifier pools performance vs other pools performance we chose to use [hyperfine](https://github.com/sharkdp/hyperfine).  
+To compare poolifier pools performance vs other pools performance we chose to use [hyperfine](https://github.com/sharkdp/hyperfine).
 We chose to use this tool because it allows to run isolated Bun processes so each pool does not impact each other.
 
 - External pools with which we compare the poolifier results:
@@ -26,8 +26,6 @@ We chose to use this tool because it allows to run isolated Bun processes so eac
 
 - External pools with which we used to compare the poolifier results:
 
-  <!-- - [node-worker-threads-pool](https://github.com/SUCHMOKUO/node-worker-threads-pool): removed because it does not support dynamic modules import or import outside the task function. The task function is expected to be self-contained, which makes it difficult to use in real world application without ugly hacks. -->
-
   - [worker-threads-pool](https://github.com/watson/worker-threads-pool): removed because unmaintained since more than 4 years.
   - [threadwork](https://github.com/kevlened/threadwork): removed because unmaintained since more than 3 years.
   - [microjob](https://github.com/wilk/microjob): removed because unmaintained since more than 5 years.
@@ -35,7 +33,7 @@ We chose to use this tool because it allows to run isolated Bun processes so eac
 
 > :warning: **We would need funds to run our benchmark more often and on Cloud VMs, please consider to sponsor this project**
 
-Read the [README.md](https://github.com/poolifier/benchmark#readme) to know how to run the benchmark.
+Read the [README.md](https://github.com/poolifier/benchmark#readme) to know how to run the benchmark. -->
 
 ## Poolifier internal benchmark
 

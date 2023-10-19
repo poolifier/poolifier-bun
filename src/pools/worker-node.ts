@@ -150,10 +150,10 @@ implements IWorkerNode<Worker, Data> {
   /** @inheritdoc */
   public async terminate (): Promise<number> {
     if (this.messageChannel != null) {
-      this.messageChannel?.port1.unref()
-      this.messageChannel?.port2.unref()
-      this.messageChannel?.port1.close()
-      this.messageChannel?.port2.close()
+      this.messageChannel.port1.unref()
+      this.messageChannel.port2.unref()
+      this.messageChannel.port1.close()
+      this.messageChannel.port2.close()
       delete this.messageChannel
     }
     return await this.worker.terminate()

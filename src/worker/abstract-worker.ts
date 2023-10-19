@@ -99,8 +99,7 @@ export abstract class AbstractWorker<
     this.checkTaskFunctions(taskFunctions)
     this.checkWorkerOptions(this.opts)
     if (!this.isMain) {
-      // Should be once() but Node.js on windows has a bug that prevents it from working
-      this.getMainWorker().on('message', this.handleReadyMessage.bind(this))
+      this.getMainWorker().once('message', this.handleReadyMessage.bind(this))
     }
   }
 
@@ -404,7 +403,7 @@ export abstract class AbstractWorker<
   private checkMessageWorkerId (message: MessageValue<Data>): void {
     if (message.workerId == null) {
       throw new Error('Message worker id is not set')
-    } else if (message.workerId != null && message.workerId !== this.id) {
+    } else if (message.workerId !== this.id) {
       throw new Error(
         `Message worker id ${message.workerId} does not match the worker id ${this.id}`
       )

@@ -186,7 +186,7 @@ export interface IWorker {
   /**
    * Worker id.
    */
-  readonly threadId?: number
+  readonly threadId: number
   /**
    * Registers an event listener.
    *
@@ -240,7 +240,7 @@ export interface IWorkerNode<Worker extends IWorker, Data = unknown> {
   readonly usage: WorkerUsage
   /**
    * Worker choice strategy data.
-   * This is used to store data that is specific to the worker choice strategy.
+   * This is used to store data that are specific to the worker choice strategy.
    */
   strategyData?: StrategyData
   /**

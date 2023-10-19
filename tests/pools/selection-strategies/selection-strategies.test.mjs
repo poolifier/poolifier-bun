@@ -54,8 +54,7 @@ describe('Selection strategies test suite', () => {
 
   test('Verify available strategies can be set after pool creation', async () => {
     for (const workerChoiceStrategy of Object.values(WorkerChoiceStrategies)) {
-      const pool = new DynamicThreadPool(
-        min,
+      const pool = new FixedThreadPool(
         max,
         './tests/worker-files/thread/testWorker.mjs'
       )
@@ -369,25 +368,14 @@ describe('Selection strategies test suite', () => {
 
   test('Verify ROUND_ROBIN strategy runtime behavior', async () => {
     const workerChoiceStrategy = WorkerChoiceStrategies.ROUND_ROBIN
-    let pool = new FixedThreadPool(
+    const pool = new FixedThreadPool(
       max,
       './tests/worker-files/thread/testWorker.mjs',
       { workerChoiceStrategy }
     )
-    let results = new Set()
+    const results = new Set()
     for (let i = 0; i < max; i++) {
-      results.add(pool.workerNodes[pool.chooseWorkerNode()].worker.id)
-    }
-    expect(results.size).toBe(max)
-    await pool.destroy()
-    pool = new FixedThreadPool(
-      max,
-      './tests/worker-files/thread/testWorker.mjs',
-      { workerChoiceStrategy }
-    )
-    results = new Set()
-    for (let i = 0; i < max; i++) {
-      results.add(pool.workerNodes[pool.chooseWorkerNode()].worker.threadId)
+      results.add(pool.workerNodes[pool.chooseWorkerNode()].info.id)
     }
     expect(results.size).toBe(max)
     await pool.destroy()
