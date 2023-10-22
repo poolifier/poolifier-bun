@@ -1205,8 +1205,8 @@ export abstract class AbstractPool<
     worker.on('error', this.opts.errorHandler ?? EMPTY_FUNCTION)
     worker.on('error', error => {
       const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
+      this.flagWorkerNodeAsNotReady(workerNodeKey)
       const workerInfo = this.getWorkerInfo(workerNodeKey)
-      workerInfo.ready = false
       this.emitter?.emit(PoolEvents.error, error)
       this.workerNodes[workerNodeKey].terminate().catch(EMPTY_FUNCTION)
       if (
