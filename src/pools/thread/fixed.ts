@@ -81,6 +81,7 @@ export class FixedThreadPool<
     await this.sendKillMessageToWorker(workerNodeKey)
     await workerNode.terminate()
     await waitWorkerExit
+    this.removeWorkerNodeByKey(workerNodeKey)
   }
 
   /** @inheritDoc */

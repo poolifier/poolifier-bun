@@ -31,7 +31,16 @@ describe('Abstract pool test suite', () => {
     }
   }
 
-  test('Simulate pool creation from a non main thread/process', () => {
+  test('Verify that pool can be created and destroyed', async () => {
+    const pool = new FixedThreadPool(
+      numberOfWorkers,
+      './tests/worker-files/thread/testWorker.mjs'
+    )
+    expect(pool).toBeInstanceOf(FixedThreadPool)
+    await pool.destroy()
+  })
+
+  test('Verify that pool cannot be created from a non main thread/process', () => {
     expect(
       () =>
         new StubPoolWithIsMain(
@@ -55,6 +64,7 @@ describe('Abstract pool test suite', () => {
     )
     expect(pool.starting).toBe(false)
     expect(pool.started).toBe(true)
+    expect(pool.stopping).toBe(false)
     await pool.destroy()
   })
 

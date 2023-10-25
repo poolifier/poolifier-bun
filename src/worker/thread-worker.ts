@@ -1,8 +1,8 @@
 import {
   type MessagePort,
   isMainThread,
-  parentPort
-  // threadId
+  parentPort,
+  threadId
 } from 'node:worker_threads'
 import type { MessageValue } from '../utility-types'
 import { AbstractWorker } from './abstract-worker'
@@ -31,8 +31,6 @@ export class ThreadWorker<
    * Message port used to communicate with the main worker.
    */
   private port!: MessagePort
-  /** @inheritdoc */
-  public id!: number
   /**
    * Constructs a new poolifier thread worker.
    *
@@ -55,13 +53,11 @@ export class ThreadWorker<
   /** @inheritDoc */
   protected handleReadyMessage (message: MessageValue<Data>): void {
     if (
-      // message.workerId === this.id &&
-      message.workerId != null &&
+      message.workerId === this.id &&
       message.ready === false &&
       message.port != null
     ) {
       try {
-        this.id = message.workerId
         this.port = message.port
         this.port.start()
         this.port.on('message', this.messageListener.bind(this))
@@ -85,10 +81,10 @@ export class ThreadWorker<
     this.port?.close()
   }
 
-  // /** @inheritDoc */
-  // protected get id (): number {
-  //   return threadId
-  // }
+  /** @inheritDoc */
+  protected get id (): number {
+    return threadId
+  }
 
   /** @inheritDoc */
   protected sendToMainWorker (message: MessageValue<Response>): void {

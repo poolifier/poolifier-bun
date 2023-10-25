@@ -85,6 +85,7 @@ export {
   max,
   median,
   min,
+  once,
   round,
   secureRandom,
   sleep

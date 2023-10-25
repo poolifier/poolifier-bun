@@ -165,7 +165,7 @@ Remember that workers can only send and receive structured-cloneable data.
 
 ## Bun versions
 
-Bun versions >= 1.0.x are supported.
+Bun versions >= 1.0.8 are supported.
 
 ## [API](./docs/api.md)
 

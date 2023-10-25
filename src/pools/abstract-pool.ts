@@ -17,6 +17,7 @@ import {
   max,
   median,
   min,
+  once,
   round
 } from '../utils'
 import { KillBehaviors } from '../worker/worker-options'
@@ -112,6 +113,10 @@ export abstract class AbstractPool<
    */
   private starting: boolean
   /**
+   * Whether the pool is stopping or not.
+   */
+  private stopping: boolean
+  /**
    * The start timestamp of the pool.
    */
   private readonly startTimestamp
@@ -160,6 +165,7 @@ export abstract class AbstractPool<
 
     this.started = false
     this.starting = false
+    this.stopping = false
     if (this.opts.startWorkers === true) {
       this.start()
     }
@@ -492,9 +498,14 @@ export abstract class AbstractPool<
   private checkMessageWorkerId (message: MessageValue<Data | Response>): void {
     if (message.workerId == null) {
       throw new Error('Worker message received without worker id')
-    } else if (this.getWorkerNodeKeyByWorkerId(message.workerId) === -1) {
+    } else if (
+      !this.stopping &&
+      this.getWorkerNodeKeyByWorkerId(message.workerId) === -1
+    ) {
       throw new Error(
-        `Worker message received from unknown worker '${message.workerId}'`
+        `Worker message received from unknown worker '${
+          message.workerId
+        }': ${JSON.stringify(message)}`
       )
     }
   }
@@ -933,12 +944,14 @@ export abstract class AbstractPool<
 
   /** @inheritDoc */
   public async destroy (): Promise<void> {
+    this.stopping = true
     await Promise.all(
       this.workerNodes.map(async (_, workerNodeKey) => {
         await this.destroyWorkerNode(workerNodeKey)
       })
     )
     this.emitter?.emit(PoolEvents.destroy, this.info)
+    this.stopping = false
     this.started = false
   }
 
@@ -960,6 +973,7 @@ export abstract class AbstractPool<
           )
         }
       }
+      // FIXME: should be registered only once
       this.registerWorkerMessageListener(workerNodeKey, killMessageListener)
       this.sendToWorker(workerNodeKey, { kill: true })
     })
@@ -1225,9 +1239,9 @@ export abstract class AbstractPool<
       }
     })
     worker.on('exit', this.opts.exitHandler ?? EMPTY_FUNCTION)
-    worker.once('exit', () => {
-      this.removeWorkerNode(worker)
-    })
+    // worker.once('exit', () => {
+    //   this.removeWorkerNode(worker)
+    // })
 
     const workerNodeKey = this.addWorkerNode(worker)
 
@@ -1517,7 +1531,11 @@ export abstract class AbstractPool<
     workerInfo.ready = message.ready as boolean
     workerInfo.taskFunctionNames = message.taskFunctionNames
     if (this.ready) {
-      this.emitter?.emit(PoolEvents.ready, this.info)
+      const emitPoolReadyEventOnce = once(
+        () => this.emitter?.emit(PoolEvents.ready, this.info),
+        this
+      )
+      emitPoolReadyEventOnce()
     }
   }
 
@@ -1611,9 +1629,18 @@ export abstract class AbstractPool<
   protected removeWorkerNode (worker: Worker): void {
     const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
     if (workerNodeKey !== -1) {
-      this.workerNodes.splice(workerNodeKey, 1)
-      this.workerChoiceStrategyContext.remove(workerNodeKey)
+      this.removeWorkerNodeByKey(workerNodeKey)
     }
+  }
+
+  /**
+   * Removes the worker given its key from the pool worker nodes.
+   *
+   * @param workerNodeKey - The worker node key.
+   */
+  protected removeWorkerNodeByKey (workerNodeKey: number): void {
+    this.workerNodes.splice(workerNodeKey, 1)
+    this.workerChoiceStrategyContext.remove(workerNodeKey)
   }
 
   protected flagWorkerNodeAsNotReady (workerNodeKey: number): void {
