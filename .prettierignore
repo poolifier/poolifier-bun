@@ -5,4 +5,5 @@ docs/**/*.html
 docs/**/*.js
 lib/
 outputs/
+pnpm-lock.yaml
 reports/
