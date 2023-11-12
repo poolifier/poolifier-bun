@@ -6,48 +6,71 @@ settings:
 
 dependencies:
   nodemailer:
-    specifier: ^6.9.5
-    version: 6.9.5
+    specifier: ^6.9.7
+    version: 6.9.7
   poolifier:
-    specifier: ^2.7.4
-    version: 2.7.4
+    specifier: ^3.0.5
+    version: 3.0.5
 
 devDependencies:
   '@types/node':
-    specifier: ^20.7.2
-    version: 20.7.2
+    specifier: ^20.9.0
+    version: 20.9.0
   '@types/nodemailer':
-    specifier: ^6.4.11
-    version: 6.4.11
+    specifier: ^6.4.14
+    version: 6.4.14
   typescript:
     specifier: ^5.2.2
     version: 5.2.2
 
 packages:
-
-  /@types/node@20.7.2:
-    resolution: {integrity: sha512-RcdC3hOBOauLP+r/kRt27NrByYtDjsXyAuSbR87O6xpsvi763WI+5fbSIvYJrXnt9w4RuxhV6eAXfIs7aaf/FQ==}
-    dev: true
-
-  /@types/nodemailer@6.4.11:
-    resolution: {integrity: sha512-Ld2c0frwpGT4VseuoeboCXQ7UJIkK3X7Lx/4YsZEiUHtHsthWAOCYtf6PAiLhMtfwV0cWJRabLBS3+LD8x6Nrw==}
+  /@types/node@20.9.0:
+    resolution:
+      {
+        integrity: sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==
+      }
     dependencies:
-      '@types/node': 20.7.2
+      undici-types: 5.26.5
     dev: true
 
-  /nodemailer@6.9.5:
-    resolution: {integrity: sha512-/dmdWo62XjumuLc5+AYQZeiRj+PRR8y8qKtFCOyuOl1k/hckZd8durUUHs/ucKx6/8kN+wFxqKJlQ/LK/qR5FA==}
-    engines: {node: '>=6.0.0'}
+  /@types/nodemailer@6.4.14:
+    resolution:
+      {
+        integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==
+      }
+    dependencies:
+      '@types/node': 20.9.0
+    dev: true
+
+  /nodemailer@6.9.7:
+    resolution:
+      {
+        integrity: sha512-rUtR77ksqex/eZRLmQ21LKVH5nAAsVicAtAYudK7JgwenEDZ0UIQ1adUGqErz7sMkWYxWTTU1aeP2Jga6WQyJw==
+      }
+    engines: { node: '>=6.0.0' }
     dev: false
 
-  /poolifier@2.7.4:
-    resolution: {integrity: sha512-Rkw7M1reDRWPLnPtS8+DFcv8IQIie44TBQ4CgQMSghu2YZ4Gip1VwbTw9t+SEgiLbIe6+cSTdlYAGtQ81DD67A==}
-    engines: {node: '>=16.14.0', pnpm: '>=8.6.0'}
+  /poolifier@3.0.5:
+    resolution:
+      {
+        integrity: sha512-nz8ya6Pr7dCumZku2Y76cqMZ4jw1hVL+udefecuGO1UycuizZpBE1d4u0XZt8NH0YqJ57eVQf95lErD0+bif3A==
+      }
+    engines: { node: '>=18.0.0', pnpm: '>=8.6.0' }
     requiresBuild: true
     dev: false
 
   /typescript@5.2.2:
-    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
-    engines: {node: '>=14.17'}
+    resolution:
+      {
+        integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==
+      }
+    engines: { node: '>=14.17' }
     hasBin: true
+    dev: true
+
+  /undici-types@5.26.5:
+    resolution:
+      {
+        integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==
+      }
     dev: true

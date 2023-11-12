@@ -19,12 +19,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "nodemailer": "^6.9.5",
-    "poolifier": "^2.7.4"
+    "nodemailer": "^6.9.7",
+    "poolifier": "^3.0.5"
   },
   "devDependencies": {
-    "@types/node": "^20.7.2",
-    "@types/nodemailer": "^6.4.11",
+    "@types/node": "^20.9.0",
+    "@types/nodemailer": "^6.4.14",
     "typescript": "^5.2.2"
   }
 }
