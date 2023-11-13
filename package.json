@@ -96,7 +96,7 @@
     "@release-it/bumper": "^6.0.1",
     "@release-it/keep-a-changelog": "^5.0.0",
     "@typescript-eslint/eslint-plugin": "^6.10.0",
-    "@typescript-eslint/parser": "^6.10.0",
+    "@typescript-eslint/parser": "^6.11.0",
     "benchmark": "^2.1.4",
     "bun-types": "latest",
     "c8": "^8.0.1",
