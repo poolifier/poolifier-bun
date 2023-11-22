@@ -62,8 +62,8 @@ describe('Abstract pool test suite', () => {
       numberOfWorkers,
       './tests/worker-files/thread/testWorker.mjs'
     )
-    expect(pool.starting).toBe(false)
     expect(pool.started).toBe(true)
+    expect(pool.starting).toBe(false)
     expect(pool.stopping).toBe(false)
     await pool.destroy()
   })
@@ -1409,23 +1409,24 @@ describe('Abstract pool test suite', () => {
       './tests/worker-files/thread/testMultipleTaskFunctionsWorker.mjs'
     )
     await waitPoolEvents(dynamicThreadPool, PoolEvents.ready, 1)
+    const workerId = dynamicThreadPool.workerNodes[0].info.id
     await expect(dynamicThreadPool.setDefaultTaskFunction(0)).rejects.toThrow(
       new Error(
-        "Task function operation 'default' failed on worker 31 with error: 'TypeError: name parameter is not a string'"
+        `Task function operation 'default' failed on worker ${workerId} with error: 'TypeError: name parameter is not a string'`
       )
     )
     await expect(
       dynamicThreadPool.setDefaultTaskFunction(DEFAULT_TASK_NAME)
     ).rejects.toThrow(
       new Error(
-        "Task function operation 'default' failed on worker 31 with error: 'Error: Cannot set the default task function reserved name as the default task function'"
+        `Task function operation 'default' failed on worker ${workerId} with error: 'Error: Cannot set the default task function reserved name as the default task function'`
       )
     )
     await expect(
       dynamicThreadPool.setDefaultTaskFunction('unknown')
     ).rejects.toThrow(
       new Error(
-        "Task function operation 'default' failed on worker 31 with error: 'Error: Cannot set the default task function to a non-existing task function'"
+        `Task function operation 'default' failed on worker ${workerId} with error: 'Error: Cannot set the default task function to a non-existing task function'`
       )
     )
     expect(dynamicThreadPool.listTaskFunctionNames()).toStrictEqual([

@@ -491,8 +491,8 @@ export abstract class AbstractWorker<
    */
   protected run (task: Task<Data>): void {
     const { name, taskId, data } = task
-    const fn = this.taskFunctions.get(name ?? DEFAULT_TASK_NAME)
-    if (fn == null) {
+    const taskFunctionName = name ?? DEFAULT_TASK_NAME
+    if (!this.taskFunctions.has(taskFunctionName)) {
       this.sendToMainWorker({
         workerError: {
           name: name as string,
@@ -503,6 +503,7 @@ export abstract class AbstractWorker<
       })
       return
     }
+    const fn = this.taskFunctions.get(taskFunctionName)
     if (isAsyncFunction(fn)) {
       this.runInAsyncScope(this.runAsync.bind(this), this, fn, task)
     } else {

@@ -114,9 +114,9 @@ export abstract class AbstractPool<
    */
   private starting: boolean
   /**
-   * Whether the pool is stopping or not.
+   * Whether the pool is destroying or not.
    */
-  private stopping: boolean
+  private destroying: boolean
   /**
    * The start timestamp of the pool.
    */
@@ -166,7 +166,7 @@ export abstract class AbstractPool<
 
     this.started = false
     this.starting = false
-    this.stopping = false
+    this.destroying = false
     if (this.opts.startWorkers === true) {
       this.start()
     }
@@ -499,10 +499,7 @@ export abstract class AbstractPool<
   private checkMessageWorkerId (message: MessageValue<Data | Response>): void {
     if (message.workerId == null) {
       throw new Error('Worker message received without worker id')
-    } else if (
-      !this.stopping &&
-      this.getWorkerNodeKeyByWorkerId(message.workerId) === -1
-    ) {
+    } else if (this.getWorkerNodeKeyByWorkerId(message.workerId) === -1) {
       throw new Error(
         `Worker message received from unknown worker '${
           message.workerId
@@ -627,7 +624,7 @@ export abstract class AbstractPool<
   private setTaskStealing (): void {
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].addEventListener(
-        'emptyqueue',
+        'emptyQueue',
         this.handleEmptyQueueEvent
       )
     }
@@ -636,7 +633,7 @@ export abstract class AbstractPool<
   private unsetTaskStealing (): void {
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].removeEventListener(
-        'emptyqueue',
+        'emptyQueue',
         this.handleEmptyQueueEvent
       )
     }
@@ -645,7 +642,7 @@ export abstract class AbstractPool<
   private setTasksStealingOnBackPressure (): void {
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].addEventListener(
-        'backpressure',
+        'backPressure',
         this.handleBackPressureEvent
       )
     }
@@ -654,7 +651,7 @@ export abstract class AbstractPool<
   private unsetTasksStealingOnBackPressure (): void {
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].removeEventListener(
-        'backpressure',
+        'backPressure',
         this.handleBackPressureEvent
       )
     }
@@ -955,14 +952,14 @@ export abstract class AbstractPool<
 
   /** @inheritDoc */
   public async destroy (): Promise<void> {
-    this.stopping = true
+    this.destroying = true
     await Promise.all(
       this.workerNodes.map(async (_, workerNodeKey) => {
         await this.destroyWorkerNode(workerNodeKey)
       })
     )
     this.emitter?.emit(PoolEvents.destroy, this.info)
-    this.stopping = false
+    this.destroying = false
     this.started = false
   }
 
@@ -1375,13 +1372,13 @@ export abstract class AbstractPool<
     if (this.opts.enableTasksQueue === true) {
       if (this.opts.tasksQueueOptions?.taskStealing === true) {
         this.workerNodes[workerNodeKey].addEventListener(
-          'emptyqueue',
+          'emptyQueue',
           this.handleEmptyQueueEvent
         )
       }
       if (this.opts.tasksQueueOptions?.tasksStealingOnBackPressure === true) {
         this.workerNodes[workerNodeKey].addEventListener(
-          'backpressure',
+          'backPressure',
           this.handleBackPressureEvent
         )
       }
@@ -1455,9 +1452,8 @@ export abstract class AbstractPool<
   private readonly handleEmptyQueueEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
-    const destinationWorkerNodeKey = this.getWorkerNodeKeyByWorkerId(
-      event.detail.workerId
-    )
+    const { workerId } = event.detail
+    const destinationWorkerNodeKey = this.getWorkerNodeKeyByWorkerId(workerId)
     const workerNodes = this.workerNodes
       .slice()
       .sort(
@@ -1467,7 +1463,7 @@ export abstract class AbstractPool<
     const sourceWorkerNode = workerNodes.find(
       workerNode =>
         workerNode.info.ready &&
-        workerNode.info.id !== event.detail.workerId &&
+        workerNode.info.id !== workerId &&
         workerNode.usage.tasks.queued > 0
     )
     if (sourceWorkerNode != null) {
@@ -1487,12 +1483,13 @@ export abstract class AbstractPool<
   private readonly handleBackPressureEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
+    const { workerId } = event.detail
     const sizeOffset = 1
     if ((this.opts.tasksQueueOptions?.size as number) <= sizeOffset) {
       return
     }
     const sourceWorkerNode =
-      this.workerNodes[this.getWorkerNodeKeyByWorkerId(event.detail.workerId)]
+      this.workerNodes[this.getWorkerNodeKeyByWorkerId(workerId)]
     const workerNodes = this.workerNodes
       .slice()
       .sort(
@@ -1503,7 +1500,7 @@ export abstract class AbstractPool<
       if (
         sourceWorkerNode.usage.tasks.queued > 0 &&
         workerNode.info.ready &&
-        workerNode.info.id !== event.detail.workerId &&
+        workerNode.info.id !== workerId &&
         workerNode.usage.tasks.queued <
           (this.opts.tasksQueueOptions?.size as number) - sizeOffset
       ) {
@@ -1564,13 +1561,13 @@ export abstract class AbstractPool<
     const { taskId, workerError, data } = message
     const promiseResponse = this.promiseResponseMap.get(taskId as string)
     if (promiseResponse != null) {
+      const { resolve, reject, workerNodeKey } = promiseResponse
       if (workerError != null) {
         this.emitter?.emit(PoolEvents.taskError, workerError)
-        promiseResponse.reject(workerError.message)
+        reject(workerError.message)
       } else {
-        promiseResponse.resolve(data as Response)
+        resolve(data as Response)
       }
-      const workerNodeKey = promiseResponse.workerNodeKey
       this.afterTaskExecutionHook(workerNodeKey, message)
       this.workerChoiceStrategyContext.update(workerNodeKey)
       this.promiseResponseMap.delete(taskId as string)

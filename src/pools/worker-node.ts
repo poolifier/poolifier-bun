@@ -79,7 +79,7 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
     if (this.hasBackPressure() && !this.onBackPressureStarted) {
       this.onBackPressureStarted = true
       this.dispatchEvent(
-        new CustomEvent<WorkerNodeEventDetail>('backpressure', {
+        new CustomEvent<WorkerNodeEventDetail>('backPressure', {
           detail: { workerId: this.info.id as number }
         })
       )
@@ -94,7 +94,7 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
     if (this.hasBackPressure() && !this.onBackPressureStarted) {
       this.onBackPressureStarted = true
       this.dispatchEvent(
-        new CustomEvent<WorkerNodeEventDetail>('backpressure', {
+        new CustomEvent<WorkerNodeEventDetail>('backPressure', {
           detail: { workerId: this.info.id as number }
         })
       )
@@ -188,7 +188,7 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
     }
     ++this.onEmptyQueueCount
     this.dispatchEvent(
-      new CustomEvent<WorkerNodeEventDetail>('emptyqueue', {
+      new CustomEvent<WorkerNodeEventDetail>('emptyQueue', {
         detail: { workerId: this.info.id as number }
       })
     )
