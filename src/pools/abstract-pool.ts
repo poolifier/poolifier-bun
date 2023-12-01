@@ -587,11 +587,13 @@ export abstract class AbstractPool<
         this.buildTasksQueueOptions(tasksQueueOptions)
       this.setTasksQueueSize(this.opts.tasksQueueOptions.size as number)
       if (this.opts.tasksQueueOptions.taskStealing === true) {
+        this.unsetTaskStealing()
         this.setTaskStealing()
       } else {
         this.unsetTaskStealing()
       }
       if (this.opts.tasksQueueOptions.tasksStealingOnBackPressure === true) {
+        this.unsetTasksStealingOnBackPressure()
         this.setTasksStealingOnBackPressure()
       } else {
         this.unsetTasksStealingOnBackPressure()
@@ -625,7 +627,7 @@ export abstract class AbstractPool<
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].addEventListener(
         'emptyQueue',
-        this.handleEmptyQueueEvent
+        this.handleEmptyQueueEvent as EventListener
       )
     }
   }
@@ -634,7 +636,7 @@ export abstract class AbstractPool<
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].removeEventListener(
         'emptyQueue',
-        this.handleEmptyQueueEvent
+        this.handleEmptyQueueEvent as EventListener
       )
     }
   }
@@ -643,7 +645,7 @@ export abstract class AbstractPool<
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].addEventListener(
         'backPressure',
-        this.handleBackPressureEvent
+        this.handleBackPressureEvent as EventListener
       )
     }
   }
@@ -652,7 +654,7 @@ export abstract class AbstractPool<
     for (const [workerNodeKey] of this.workerNodes.entries()) {
       this.workerNodes[workerNodeKey].removeEventListener(
         'backPressure',
-        this.handleBackPressureEvent
+        this.handleBackPressureEvent as EventListener
       )
     }
   }
@@ -954,11 +956,12 @@ export abstract class AbstractPool<
   public async destroy (): Promise<void> {
     this.destroying = true
     await Promise.all(
-      this.workerNodes.map(async (_, workerNodeKey) => {
+      this.workerNodes.map(async (_workerNode, workerNodeKey) => {
         await this.destroyWorkerNode(workerNodeKey)
       })
     )
     this.emitter?.emit(PoolEvents.destroy, this.info)
+    this.emitter?.removeAllListeners()
     this.destroying = false
     this.started = false
   }
@@ -1363,7 +1366,7 @@ export abstract class AbstractPool<
     // Listen to worker messages.
     this.registerWorkerMessageListener(
       workerNodeKey,
-      this.workerMessageListener.bind(this)
+      this.workerMessageListener
     )
     // Send the startup message to worker.
     this.sendStartupMessageToWorker(workerNodeKey)
@@ -1373,13 +1376,13 @@ export abstract class AbstractPool<
       if (this.opts.tasksQueueOptions?.taskStealing === true) {
         this.workerNodes[workerNodeKey].addEventListener(
           'emptyQueue',
-          this.handleEmptyQueueEvent
+          this.handleEmptyQueueEvent as EventListener
         )
       }
       if (this.opts.tasksQueueOptions?.tasksStealingOnBackPressure === true) {
         this.workerNodes[workerNodeKey].addEventListener(
           'backPressure',
-          this.handleBackPressureEvent
+          this.handleBackPressureEvent as EventListener
         )
       }
     }
@@ -1521,33 +1524,37 @@ export abstract class AbstractPool<
   /**
    * This method is the message listener registered on each worker.
    */
-  protected workerMessageListener (message: MessageValue<Response>): void {
+  protected readonly workerMessageListener = (
+    message: MessageValue<Response>
+  ): void => {
     this.checkMessageWorkerId(message)
-    if (message.ready != null && message.taskFunctionNames != null) {
+    const { workerId, ready, taskId, taskFunctionNames } = message
+    if (ready != null && taskFunctionNames != null) {
       // Worker ready response received from worker
       this.handleWorkerReadyResponse(message)
-    } else if (message.taskId != null) {
+    } else if (taskId != null) {
       // Task execution response received from worker
       this.handleTaskExecutionResponse(message)
-    } else if (message.taskFunctionNames != null) {
+    } else if (taskFunctionNames != null) {
       // Task function names message received from worker
       this.getWorkerInfo(
-        this.getWorkerNodeKeyByWorkerId(message.workerId)
-      ).taskFunctionNames = message.taskFunctionNames
+        this.getWorkerNodeKeyByWorkerId(workerId)
+      ).taskFunctionNames = taskFunctionNames
     }
   }
 
   private handleWorkerReadyResponse (message: MessageValue<Response>): void {
-    if (message.ready === false) {
+    const { workerId, ready, taskFunctionNames } = message
+    if (ready === false) {
       throw new Error(
         `Worker ${message.workerId as number} failed to initialize`
       )
     }
     const workerInfo = this.getWorkerInfo(
-      this.getWorkerNodeKeyByWorkerId(message.workerId)
+      this.getWorkerNodeKeyByWorkerId(workerId)
     )
-    workerInfo.ready = message.ready as boolean
-    workerInfo.taskFunctionNames = message.taskFunctionNames
+    workerInfo.ready = ready as boolean
+    workerInfo.taskFunctionNames = taskFunctionNames
     if (this.ready) {
       const emitPoolReadyEventOnce = once(
         () => this.emitter?.emit(PoolEvents.ready, this.info),
