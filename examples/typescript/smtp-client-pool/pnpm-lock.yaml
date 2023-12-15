@@ -9,24 +9,24 @@ dependencies:
     specifier: ^6.9.7
     version: 6.9.7
   poolifier:
-    specifier: ^3.0.5
-    version: 3.0.5
+    specifier: ^3.0.14
+    version: 3.0.14
 
 devDependencies:
   '@types/node':
-    specifier: ^20.9.0
-    version: 20.9.0
+    specifier: ^20.10.4
+    version: 20.10.4
   '@types/nodemailer':
     specifier: ^6.4.14
     version: 6.4.14
   typescript:
-    specifier: ^5.2.2
-    version: 5.2.2
+    specifier: ^5.3.3
+    version: 5.3.3
 
 packages:
 
-  /@types/node@20.9.0:
-    resolution: {integrity: sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==}
+  /@types/node@20.10.4:
+    resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -34,7 +34,7 @@ packages:
   /@types/nodemailer@6.4.14:
     resolution: {integrity: sha512-fUWthHO9k9DSdPCSPRqcu6TWhYyxTBg382vlNIttSe9M7XfsT06y0f24KHXtbnijPGGRIcVvdKHTNikOI6qiHA==}
     dependencies:
-      '@types/node': 20.9.0
+      '@types/node': 20.10.4
     dev: true
 
   /nodemailer@6.9.7:
@@ -42,14 +42,14 @@ packages:
     engines: {node: '>=6.0.0'}
     dev: false
 
-  /poolifier@3.0.5:
-    resolution: {integrity: sha512-nz8ya6Pr7dCumZku2Y76cqMZ4jw1hVL+udefecuGO1UycuizZpBE1d4u0XZt8NH0YqJ57eVQf95lErD0+bif3A==}
+  /poolifier@3.0.14:
+    resolution: {integrity: sha512-bER0wR3NADyvQpexHY6fbVd+rikk4hxt1tzIhKkwOcoJcqkoD+eAtN+2sVbAIUYFqwhNdeaZQwmpxcDlZ2jv3Q==}
     engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
     requiresBuild: true
     dev: false
 
-  /typescript@5.2.2:
-    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true

@@ -6,11 +6,11 @@ settings:
 
 dependencies:
   poolifier:
-    specifier: ^3.0.5
-    version: 3.0.5
+    specifier: ^3.0.14
+    version: 3.0.14
   ws:
-    specifier: ^8.14.2
-    version: 8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3)
+    specifier: ^8.15.1
+    version: 8.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.3)
 
 optionalDependencies:
   bufferutil:
@@ -22,27 +22,27 @@ optionalDependencies:
 
 devDependencies:
   '@types/node':
-    specifier: ^20.9.0
-    version: 20.9.0
+    specifier: ^20.10.4
+    version: 20.10.4
   '@types/ws':
-    specifier: ^8.5.9
-    version: 8.5.9
+    specifier: ^8.5.10
+    version: 8.5.10
   typescript:
-    specifier: ^5.2.2
-    version: 5.2.2
+    specifier: ^5.3.3
+    version: 5.3.3
 
 packages:
 
-  /@types/node@20.9.0:
-    resolution: {integrity: sha512-nekiGu2NDb1BcVofVcEKMIwzlx4NjHlcjhoxxKBNLtz15Y1z7MYf549DFvkHSId02Ax6kGwWntIBPC3l/JZcmw==}
+  /@types/node@20.10.4:
+    resolution: {integrity: sha512-D08YG6rr8X90YB56tSIuBaddy/UXAA9RKJoFvrsnogAum/0pmjkgi4+2nx96A330FmioegBWmEYQ+syqCFaveg==}
     dependencies:
       undici-types: 5.26.5
     dev: true
 
-  /@types/ws@8.5.9:
-    resolution: {integrity: sha512-jbdrY0a8lxfdTp/+r7Z4CkycbOFN8WX+IOchLJr3juT/xzbJ8URyTVSJ/hvNdadTgM1mnedb47n+Y31GsFnQlg==}
+  /@types/ws@8.5.10:
+    resolution: {integrity: sha512-vmQSUcfalpIq0R9q7uTo2lXs6eGIpt9wtnLdMv9LVpIjCA/+ufZRozlVoVelIYixx1ugCBKDhn89vnsEGOCx9A==}
     dependencies:
-      '@types/node': 20.9.0
+      '@types/node': 20.10.4
     dev: true
 
   /bufferutil@4.0.8:
@@ -50,23 +50,23 @@ packages:
     engines: {node: '>=6.14.2'}
     requiresBuild: true
     dependencies:
-      node-gyp-build: 4.6.1
+      node-gyp-build: 4.7.1
     dev: false
 
-  /node-gyp-build@4.6.1:
-    resolution: {integrity: sha512-24vnklJmyRS8ViBNI8KbtK/r/DmXQMRiOMXTNz2nrTnAYUwjmEEbnnpB/+kt+yWRv73bPsSPRFddrcIbAxSiMQ==}
+  /node-gyp-build@4.7.1:
+    resolution: {integrity: sha512-wTSrZ+8lsRRa3I3H8Xr65dLWSgCvY2l4AOnaeKdPA9TB/WYMPaTcrzf3rXvFoVvjKNVnu0CcWSx54qq9GKRUYg==}
     hasBin: true
     requiresBuild: true
     dev: false
 
-  /poolifier@3.0.5:
-    resolution: {integrity: sha512-nz8ya6Pr7dCumZku2Y76cqMZ4jw1hVL+udefecuGO1UycuizZpBE1d4u0XZt8NH0YqJ57eVQf95lErD0+bif3A==}
+  /poolifier@3.0.14:
+    resolution: {integrity: sha512-bER0wR3NADyvQpexHY6fbVd+rikk4hxt1tzIhKkwOcoJcqkoD+eAtN+2sVbAIUYFqwhNdeaZQwmpxcDlZ2jv3Q==}
     engines: {node: '>=18.0.0', pnpm: '>=8.6.0'}
     requiresBuild: true
     dev: false
 
-  /typescript@5.2.2:
-    resolution: {integrity: sha512-mI4WrpHsbCIcwT9cF4FZvr80QUeKvsUsUvKDoR+X/7XHQH98xYD8YHZg7ANtz2GtZt/CBq2QJ0thkGJMHfqc1w==}
+  /typescript@5.3.3:
+    resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
     hasBin: true
     dev: true
@@ -80,11 +80,11 @@ packages:
     engines: {node: '>=6.14.2'}
     requiresBuild: true
     dependencies:
-      node-gyp-build: 4.6.1
+      node-gyp-build: 4.7.1
     dev: false
 
-  /ws@8.14.2(bufferutil@4.0.8)(utf-8-validate@6.0.3):
-    resolution: {integrity: sha512-wEBG1ftX4jcglPxgFCMJmZ2PLtSbJ2Peg6TmpJFTbe9GZYOQCDPdMYu/Tm0/bGZkw8paZnJY45J4K2PZrLYq8g==}
+  /ws@8.15.1(bufferutil@4.0.8)(utf-8-validate@6.0.3):
+    resolution: {integrity: sha512-W5OZiCjXEmk0yZ66ZN82beM5Sz7l7coYxpRkzS+p9PP+ToQry8szKh+61eNktr7EA9DOwvFGhfC605jDHbP6QQ==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1

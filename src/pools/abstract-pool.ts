@@ -296,8 +296,8 @@ export abstract class AbstractPool<
         0
       ),
       busyWorkerNodes: this.workerNodes.reduce(
-        (accumulator, workerNode) =>
-          workerNode.usage.tasks.executing > 0 ? accumulator + 1 : accumulator,
+        (accumulator, _workerNode, workerNodeKey) =>
+          this.isWorkerNodeBusy(workerNodeKey) ? accumulator + 1 : accumulator,
         0
       ),
       executedTasks: this.workerNodes.reduce(
@@ -697,6 +697,16 @@ export abstract class AbstractPool<
           workerNode.info.ready && workerNode.usage.tasks.executing === 0
       ) === -1
     )
+  }
+
+  private isWorkerNodeBusy (workerNodeKey: number): boolean {
+    if (this.opts.enableTasksQueue === true) {
+      return (
+        this.workerNodes[workerNodeKey].usage.tasks.executing >=
+        (this.opts.tasksQueueOptions?.concurrency as number)
+      )
+    }
+    return this.workerNodes[workerNodeKey].usage.tasks.executing > 0
   }
 
   private async sendTaskFunctionOperationToWorker (
@@ -1412,7 +1422,18 @@ export abstract class AbstractPool<
     })
   }
 
+  private handleTask (workerNodeKey: number, task: Task<Data>): void {
+    if (this.shallExecuteTask(workerNodeKey)) {
+      this.executeTask(workerNodeKey, task)
+    } else {
+      this.enqueueTask(workerNodeKey, task)
+    }
+  }
+
   private redistributeQueuedTasks (workerNodeKey: number): void {
+    if (this.workerNodes.length <= 1) {
+      return
+    }
     while (this.tasksQueueSize(workerNodeKey) > 0) {
       const destinationWorkerNodeKey = this.workerNodes.reduce(
         (minWorkerNodeKey, workerNode, workerNodeKey, workerNodes) => {
@@ -1424,12 +1445,10 @@ export abstract class AbstractPool<
         },
         0
       )
-      const task = this.dequeueTask(workerNodeKey) as Task<Data>
-      if (this.shallExecuteTask(destinationWorkerNodeKey)) {
-        this.executeTask(destinationWorkerNodeKey, task)
-      } else {
-        this.enqueueTask(destinationWorkerNodeKey, task)
-      }
+      this.handleTask(
+        destinationWorkerNodeKey,
+        this.dequeueTask(workerNodeKey) as Task<Data>
+      )
     }
   }
 
@@ -1455,6 +1474,9 @@ export abstract class AbstractPool<
   private readonly handleEmptyQueueEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
+    if (this.workerNodes.length <= 1) {
+      return
+    }
     const { workerId } = event.detail
     const destinationWorkerNodeKey = this.getWorkerNodeKeyByWorkerId(workerId)
     const workerNodes = this.workerNodes
@@ -1471,11 +1493,7 @@ export abstract class AbstractPool<
     )
     if (sourceWorkerNode != null) {
       const task = sourceWorkerNode.popTask() as Task<Data>
-      if (this.shallExecuteTask(destinationWorkerNodeKey)) {
-        this.executeTask(destinationWorkerNodeKey, task)
-      } else {
-        this.enqueueTask(destinationWorkerNodeKey, task)
-      }
+      this.handleTask(destinationWorkerNodeKey, task)
       this.updateTaskStolenStatisticsWorkerUsage(
         destinationWorkerNodeKey,
         task.name as string
@@ -1486,6 +1504,9 @@ export abstract class AbstractPool<
   private readonly handleBackPressureEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
+    if (this.workerNodes.length <= 1) {
+      return
+    }
     const { workerId } = event.detail
     const sizeOffset = 1
     if ((this.opts.tasksQueueOptions?.size as number) <= sizeOffset) {
@@ -1508,11 +1529,7 @@ export abstract class AbstractPool<
           (this.opts.tasksQueueOptions?.size as number) - sizeOffset
       ) {
         const task = sourceWorkerNode.popTask() as Task<Data>
-        if (this.shallExecuteTask(workerNodeKey)) {
-          this.executeTask(workerNodeKey, task)
-        } else {
-          this.enqueueTask(workerNodeKey, task)
-        }
+        this.handleTask(workerNodeKey, task)
         this.updateTaskStolenStatisticsWorkerUsage(
           workerNodeKey,
           task.name as string
