@@ -94,7 +94,6 @@ module.exports = defineConfig({
           'unlink',
           'unref',
           'utf8',
-          'webcrypto',
           'workerpool',
           'ws',
           'wss',
@@ -160,7 +159,6 @@ module.exports = defineConfig({
     {
       files: ['tests/**/*.js', 'tests/**/*.mjs'],
       rules: {
-        'n/no-missing-import': 'off',
         'import/no-unresolved': ['error', { ignore: ['^bun:test$'] }],
         'jsdoc/require-jsdoc': 'off'
       }
@@ -174,7 +172,6 @@ module.exports = defineConfig({
     {
       files: ['examples/javascript/**/*.js'],
       rules: {
-        'n/no-missing-require': 'off',
         'jsdoc/require-jsdoc': 'off'
       }
     }
