@@ -22,7 +22,7 @@ export type {
   StrategyData,
   TaskStatistics,
   WorkerInfo,
-  WorkerNodeEventCallback,
+  WorkerNodeEventDetail,
   WorkerType,
   WorkerUsage
 } from './pools/worker'

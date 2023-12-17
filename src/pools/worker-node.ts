@@ -57,7 +57,7 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
     super()
     checkWorkerNodeArguments<Worker>(worker, tasksQueueBackPressureSize)
     this.worker = worker
-    this.info = this.initWorkerInfo(worker)
+    this.info = this.initWorkerInfo(this.worker)
     this.usage = this.initWorkerUsage()
     this.messageChannel = new MessageChannel()
     this.messageChannel.port1.start()
@@ -139,14 +139,15 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
 
   /** @inheritdoc */
   public async terminate (): Promise<number> {
-    if (this.messageChannel != null) {
-      this.messageChannel.port1.unref()
-      this.messageChannel.port2.unref()
-      this.messageChannel.port1.close()
-      this.messageChannel.port2.close()
-      delete this.messageChannel
-    }
-    return await this.worker.terminate()
+    const waitWorkerExit = new Promise<void>(resolve => {
+      this.worker.once('exit', () => {
+        resolve()
+      })
+    })
+    this.closeMessageChannel()
+    const exitCode = await this.worker.terminate()
+    await waitWorkerExit
+    return exitCode
   }
 
   /** @inheritdoc */
@@ -176,6 +177,16 @@ export class WorkerNode<Worker extends IWorker, Data = unknown>
   /** @inheritdoc */
   public deleteTaskFunctionWorkerUsage (name: string): boolean {
     return this.taskFunctionsUsage.delete(name)
+  }
+
+  private closeMessageChannel (): void {
+    if (this.messageChannel != null) {
+      this.messageChannel.port1.unref()
+      this.messageChannel.port2.unref()
+      this.messageChannel.port1.close()
+      this.messageChannel.port2.close()
+      delete this.messageChannel
+    }
   }
 
   private async startOnEmptyQueue (): Promise<void> {

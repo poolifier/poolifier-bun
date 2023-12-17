@@ -214,17 +214,10 @@ export interface IWorker {
   readonly once: (event: 'exit', handler: ExitHandler<this>) => void
   /**
    * Terminates the worker.
+   *
+   * @returns A promise that resolves to the exit code.
    */
   terminate: () => Promise<number>
-}
-
-/**
- * Worker node event detail.
- *
- * @internal
- */
-export interface WorkerNodeEventDetail {
-  workerId: number
 }
 
 /**
@@ -254,7 +247,7 @@ export interface IWorkerNode<Worker extends IWorker, Data = unknown>
    */
   strategyData?: StrategyData
   /**
-   * Message channel (worker_threads only).
+   * Message channel (worker thread only).
    */
   readonly messageChannel?: MessageChannel
   /**
@@ -326,4 +319,13 @@ export interface IWorkerNode<Worker extends IWorker, Data = unknown>
    * @returns `true` if the task function worker usage statistics were deleted, `false` otherwise.
    */
   readonly deleteTaskFunctionWorkerUsage: (name: string) => boolean
+}
+
+/**
+ * Worker node event detail.
+ *
+ * @internal
+ */
+export interface WorkerNodeEventDetail {
+  workerId: number
 }

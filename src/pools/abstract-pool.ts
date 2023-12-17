@@ -1005,7 +1005,15 @@ export abstract class AbstractPool<
    *
    * @param workerNodeKey - The worker node key.
    */
-  protected abstract destroyWorkerNode (workerNodeKey: number): Promise<void>
+  protected async destroyWorkerNode (workerNodeKey: number): Promise<void> {
+    this.flagWorkerNodeAsNotReady(workerNodeKey)
+    this.flushTasksQueue(workerNodeKey)
+    // FIXME: wait for tasks to be finished
+    const workerNode = this.workerNodes[workerNodeKey]
+    await this.sendKillMessageToWorker(workerNodeKey)
+    await workerNode.terminate()
+    this.removeWorkerNodeByKey(workerNodeKey)
+  }
 
   /**
    * Setup hook to execute code before worker nodes are created in the abstract constructor.
@@ -1240,16 +1248,15 @@ export abstract class AbstractPool<
     worker.on('error', this.opts.errorHandler ?? EMPTY_FUNCTION)
     worker.on('error', error => {
       const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
-      this.flagWorkerNodeAsNotReady(workerNodeKey)
-      const workerInfo = this.getWorkerInfo(workerNodeKey)
+      const workerNode = this.workerNodes[workerNodeKey]
+      workerNode.info.ready = false
       this.emitter?.emit(PoolEvents.error, error)
-      this.workerNodes[workerNodeKey].terminate().catch(EMPTY_FUNCTION)
       if (
         this.started &&
         !this.starting &&
         this.opts.restartWorkerOnError === true
       ) {
-        if (workerInfo.dynamic) {
+        if (workerNode.info.dynamic) {
           this.createAndSetupDynamicWorkerNode()
         } else {
           this.createAndSetupWorkerNode()
@@ -1258,6 +1265,10 @@ export abstract class AbstractPool<
       if (this.started && this.opts.enableTasksQueue === true) {
         this.redistributeQueuedTasks(workerNodeKey)
       }
+      workerNode.terminate().catch(error => {
+        this.emitter?.emit(PoolEvents.error, error)
+      })
+      this.removeWorkerNode(worker)
     })
     worker.on('exit', this.opts.exitHandler ?? EMPTY_FUNCTION)
     // worker.once('exit', () => {
@@ -1640,7 +1651,7 @@ export abstract class AbstractPool<
   }
 
   /**
-   * Adds the given worker in the pool worker nodes.
+   * Adds the worker node associated to the given worker in the pool worker nodes.
    *
    * @param worker - The worker.
    * @returns The added worker node key.
@@ -1658,13 +1669,13 @@ export abstract class AbstractPool<
     this.workerNodes.push(workerNode)
     const workerNodeKey = this.getWorkerNodeKeyByWorker(worker)
     if (workerNodeKey === -1) {
-      throw new Error('Worker added not found in worker nodes')
+      throw new Error('Worker node added not found in worker nodes')
     }
     return workerNodeKey
   }
 
   /**
-   * Removes the given worker from the pool worker nodes.
+   * Removes the worker node associated to the given worker from the pool worker nodes.
    *
    * @param worker - The worker.
    */
@@ -1676,7 +1687,7 @@ export abstract class AbstractPool<
   }
 
   /**
-   * Removes the worker given its key from the pool worker nodes.
+   * Removes the worker node given its key from the pool worker nodes.
    *
    * @param workerNodeKey - The worker node key.
    */
