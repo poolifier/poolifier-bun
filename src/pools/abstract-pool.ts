@@ -54,6 +54,7 @@ import {
   checkValidTasksQueueOptions,
   checkValidWorkerChoiceStrategy,
   updateMeasurementStatistics
+  // waitWorkerNodeEvents
 } from './utils'
 
 /**
@@ -1008,8 +1009,13 @@ export abstract class AbstractPool<
   protected async destroyWorkerNode (workerNodeKey: number): Promise<void> {
     this.flagWorkerNodeAsNotReady(workerNodeKey)
     this.flushTasksQueue(workerNodeKey)
-    // FIXME: wait for tasks to be finished
     const workerNode = this.workerNodes[workerNodeKey]
+    // FIXME: wait for tasks to be finished
+    // await waitWorkerNodeEvents(
+    //   workerNode,
+    //   'taskFinished',
+    //   workerNode.usage.tasks.executing
+    // )
     await this.sendKillMessageToWorker(workerNodeKey)
     await workerNode.terminate()
     this.removeWorkerNodeByKey(workerNodeKey)
@@ -1606,6 +1612,7 @@ export abstract class AbstractPool<
       this.afterTaskExecutionHook(workerNodeKey, message)
       this.workerChoiceStrategyContext.update(workerNodeKey)
       this.promiseResponseMap.delete(taskId as string)
+      this.workerNodes[workerNodeKey].dispatchEvent(new Event('taskFinished'))
       if (
         this.opts.enableTasksQueue === true &&
         this.tasksQueueSize(workerNodeKey) > 0 &&

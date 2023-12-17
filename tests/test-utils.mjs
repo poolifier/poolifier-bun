@@ -9,6 +9,7 @@ export const waitWorkerEvents = async (
     let events = 0
     if (numberOfEventsToWait === 0) {
       resolve(events)
+      return
     }
     for (const workerNode of pool.workerNodes) {
       workerNode.worker.on(workerEvent, () => {
@@ -26,6 +27,7 @@ export const waitPoolEvents = async (pool, poolEvent, numberOfEventsToWait) => {
     let events = 0
     if (numberOfEventsToWait === 0) {
       resolve(events)
+      return
     }
     pool.emitter?.on(poolEvent, () => {
       ++events

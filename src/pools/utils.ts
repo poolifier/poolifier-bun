@@ -6,7 +6,7 @@ import {
   type WorkerChoiceStrategy
 } from './selection-strategies/selection-strategies-types'
 import type { TasksQueueOptions } from './pool'
-import type { IWorker, MeasurementStatistics } from './worker'
+import type { IWorker, IWorkerNode, MeasurementStatistics } from './worker'
 
 export const checkFilePath = (filePath: string): void => {
   if (!existsSync(filePath)) {
@@ -152,4 +152,27 @@ export const updateMeasurementStatistics = (
       }
     }
   }
+}
+
+export const waitWorkerNodeEvents = async <
+  Worker extends IWorker,
+  Data = unknown
+>(
+  workerNode: IWorkerNode<Worker, Data>,
+  workerNodeEvent: string,
+  numberOfEventsToWait: number
+): Promise<number> => {
+  return await new Promise<number>(resolve => {
+    let events = 0
+    if (numberOfEventsToWait === 0) {
+      resolve(events)
+      return
+    }
+    workerNode.addEventListener(workerNodeEvent, () => {
+      ++events
+      if (events === numberOfEventsToWait) {
+        resolve(events)
+      }
+    })
+  })
 }
