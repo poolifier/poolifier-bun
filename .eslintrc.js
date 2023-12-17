@@ -163,7 +163,7 @@ module.exports = defineConfig({
       files: ['tests/**/*.js', 'tests/**/*.mjs'],
       rules: {
         'import/no-unresolved': ['error', { ignore: ['^bun:test$'] }],
-        'n/no-missing-import': ['error', { allowModules: ['bun'] }],
+        'n/no-missing-import': 'off',
         'jsdoc/require-jsdoc': 'off'
       }
     },
@@ -176,7 +176,6 @@ module.exports = defineConfig({
     {
       files: ['examples/javascript/**/*.js'],
       rules: {
-        'n/no-missing-require': ['error', { allowModules: ['bun'] }],
         'jsdoc/require-jsdoc': 'off'
       }
     }
