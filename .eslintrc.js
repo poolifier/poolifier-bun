@@ -176,6 +176,7 @@ module.exports = defineConfig({
     {
       files: ['examples/javascript/**/*.js'],
       rules: {
+        'n/no-missing-require': ['error', { allowModules: ['poolifier'] }],
         'jsdoc/require-jsdoc': 'off'
       }
     }
