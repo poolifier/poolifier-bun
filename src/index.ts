@@ -8,7 +8,6 @@ export type {
   PoolType,
   TasksQueueOptions
 } from './pools/pool'
-export { updateMeasurementStatistics } from './pools/utils'
 export { WorkerTypes } from './pools/worker'
 export type {
   ErrorHandler,
@@ -41,7 +40,8 @@ export type {
   WorkerChoiceStrategyOptions
 } from './pools/selection-strategies/selection-strategies-types'
 export { DynamicThreadPool } from './pools/thread/dynamic'
-export { FixedThreadPool, type ThreadPoolOptions } from './pools/thread/fixed'
+export { FixedThreadPool } from './pools/thread/fixed'
+export type { ThreadPoolOptions } from './pools/thread/fixed'
 export type { AbstractWorker } from './worker/abstract-worker'
 export { ThreadWorker } from './worker/thread-worker'
 export { KillBehaviors } from './worker/worker-options'
@@ -67,8 +67,7 @@ export type {
   Writable
 } from './utility-types'
 export { CircularArray, DEFAULT_CIRCULAR_ARRAY_SIZE } from './circular-array'
-export { Deque, type Node } from './deque'
-export { WorkerNode } from './pools/worker-node'
+export type { Deque, Node } from './deque'
 export {
   DEFAULT_MEASUREMENT_STATISTICS_REQUIREMENTS,
   DEFAULT_TASK_NAME,
