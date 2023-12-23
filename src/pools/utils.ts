@@ -160,7 +160,6 @@ const updateMeasurementStatistics = (
     }
   }
 }
-
 if (env.NODE_ENV === 'test') {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   exports.updateMeasurementStatistics = updateMeasurementStatistics

@@ -286,9 +286,9 @@ export abstract class AbstractPool<
       strategy: this.opts.workerChoiceStrategy as WorkerChoiceStrategy,
       minSize: this.minSize,
       maxSize: this.maxSize,
-      ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+      ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
         .runTime.aggregate &&
-        this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+        this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
           .waitTime.aggregate && { utilization: round(this.utilization) }),
       workerNodes: this.workerNodes.length,
       idleWorkerNodes: this.workerNodes.reduce(
@@ -342,7 +342,7 @@ export abstract class AbstractPool<
           accumulator + workerNode.usage.tasks.failed,
         0
       ),
-      ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+      ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
         .runTime.aggregate && {
         runTime: {
           minimum: round(
@@ -359,7 +359,7 @@ export abstract class AbstractPool<
               )
             )
           ),
-          ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+          ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
             .runTime.average && {
             average: round(
               average(
@@ -371,7 +371,7 @@ export abstract class AbstractPool<
               )
             )
           }),
-          ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+          ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
             .runTime.median && {
             median: round(
               median(
@@ -385,7 +385,7 @@ export abstract class AbstractPool<
           })
         }
       }),
-      ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+      ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
         .waitTime.aggregate && {
         waitTime: {
           minimum: round(
@@ -402,7 +402,7 @@ export abstract class AbstractPool<
               )
             )
           ),
-          ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+          ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
             .waitTime.average && {
             average: round(
               average(
@@ -414,7 +414,7 @@ export abstract class AbstractPool<
               )
             )
           }),
-          ...(this.workerChoiceStrategyContext.getTaskStatisticsRequirements()
+          ...(this.workerChoiceStrategyContext?.getTaskStatisticsRequirements()
             .waitTime.median && {
             median: round(
               median(
