@@ -1392,6 +1392,10 @@ export abstract class AbstractPool<
     })
   }
 
+  private cannotStealTask (): boolean {
+    return this.workerNodes.length <= 1 || this.info.queuedTasks === 0
+  }
+
   private handleTask (workerNodeKey: number, task: Task<Data>): void {
     if (this.shallExecuteTask(workerNodeKey)) {
       this.executeTask(workerNodeKey, task)
@@ -1401,10 +1405,7 @@ export abstract class AbstractPool<
   }
 
   private redistributeQueuedTasks (workerNodeKey: number): void {
-    if (workerNodeKey === -1) {
-      return
-    }
-    if (this.workerNodes.length <= 1) {
+    if (workerNodeKey === -1 || this.cannotStealTask()) {
       return
     }
     while (this.tasksQueueSize(workerNodeKey) > 0) {
@@ -1447,7 +1448,7 @@ export abstract class AbstractPool<
   private readonly handleEmptyQueueEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
-    if (this.workerNodes.length <= 1) {
+    if (this.cannotStealTask()) {
       return
     }
     const { workerId } = event.detail
@@ -1477,7 +1478,7 @@ export abstract class AbstractPool<
   private readonly handleBackPressureEvent = (
     event: CustomEvent<WorkerNodeEventDetail>
   ): void => {
-    if (this.workerNodes.length <= 1) {
+    if (this.cannotStealTask()) {
       return
     }
     const { workerId } = event.detail
