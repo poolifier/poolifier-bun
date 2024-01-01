@@ -44,30 +44,6 @@ describe('Worker choice strategy context test suite', () => {
     )
   })
 
-  test('Verify that execute() return the worker node key chosen by the strategy with fixed pool', () => {
-    const workerChoiceStrategyContext = new WorkerChoiceStrategyContext(
-      fixedPool
-    )
-    const workerChoiceStrategyStub = new RoundRobinWorkerChoiceStrategy(
-      fixedPool
-    )
-    workerChoiceStrategyStub.choose = mock(() => 0)
-    expect(workerChoiceStrategyContext.workerChoiceStrategy).toBe(
-      WorkerChoiceStrategies.ROUND_ROBIN
-    )
-    workerChoiceStrategyContext.workerChoiceStrategies.set(
-      workerChoiceStrategyContext.workerChoiceStrategy,
-      workerChoiceStrategyStub
-    )
-    const chosenWorkerKey = workerChoiceStrategyContext.execute()
-    expect(
-      workerChoiceStrategyContext.workerChoiceStrategies.get(
-        workerChoiceStrategyContext.workerChoiceStrategy
-      ).choose
-    ).toHaveBeenCalledTimes(1)
-    expect(chosenWorkerKey).toBe(0)
-  })
-
   test('Verify that execute() throws error if null or undefined is returned after retries', () => {
     const workerChoiceStrategyContext = new WorkerChoiceStrategyContext(
       fixedPool
@@ -96,6 +72,30 @@ describe('Worker choice strategy context test suite', () => {
     expect(() => workerChoiceStrategyContext.execute()).toThrow(
       new Error('Worker node key chosen is null or undefined after 6 retries')
     )
+  })
+
+  test('Verify that execute() return the worker node key chosen by the strategy with fixed pool', () => {
+    const workerChoiceStrategyContext = new WorkerChoiceStrategyContext(
+      fixedPool
+    )
+    const workerChoiceStrategyStub = new RoundRobinWorkerChoiceStrategy(
+      fixedPool
+    )
+    workerChoiceStrategyStub.choose = mock(() => 0)
+    expect(workerChoiceStrategyContext.workerChoiceStrategy).toBe(
+      WorkerChoiceStrategies.ROUND_ROBIN
+    )
+    workerChoiceStrategyContext.workerChoiceStrategies.set(
+      workerChoiceStrategyContext.workerChoiceStrategy,
+      workerChoiceStrategyStub
+    )
+    const chosenWorkerKey = workerChoiceStrategyContext.execute()
+    expect(
+      workerChoiceStrategyContext.workerChoiceStrategies.get(
+        workerChoiceStrategyContext.workerChoiceStrategy
+      ).choose
+    ).toHaveBeenCalledTimes(1)
+    expect(chosenWorkerKey).toBe(0)
   })
 
   test('Verify that execute() return the worker node key chosen by the strategy with dynamic pool', () => {

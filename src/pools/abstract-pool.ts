@@ -1271,7 +1271,6 @@ export abstract class AbstractPool<
         })
       }
     })
-    const workerInfo = this.getWorkerInfo(workerNodeKey)
     this.sendToWorker(workerNodeKey, {
       checkActive: true
     })
@@ -1286,6 +1285,7 @@ export abstract class AbstractPool<
         })
       }
     }
+    const workerInfo = this.getWorkerInfo(workerNodeKey)
     workerInfo.dynamic = true
     if (
       this.workerChoiceStrategyContext.getStrategyPolicy().dynamicWorkerReady ||
@@ -1536,7 +1536,7 @@ export abstract class AbstractPool<
 
   private handleWorkerReadyResponse (message: MessageValue<Response>): void {
     const { workerId, ready, taskFunctionNames } = message
-    if (ready === false) {
+    if (ready == null || !ready) {
       throw new Error(
         `Worker ${message.workerId as number} failed to initialize`
       )
@@ -1544,7 +1544,7 @@ export abstract class AbstractPool<
     const workerInfo = this.getWorkerInfo(
       this.getWorkerNodeKeyByWorkerId(workerId)
     )
-    workerInfo.ready = ready as boolean
+    workerInfo.ready = ready
     workerInfo.taskFunctionNames = taskFunctionNames
     if (this.ready) {
       const emitPoolReadyEventOnce = once(

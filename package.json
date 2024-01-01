@@ -22,23 +22,13 @@
     "test:debug": "bun run build && cross-env NODE_ENV=test bun test --inspect tests/**/*.test.mjs",
     "coverage": "c8 report --reporter=lcov",
     "coverage:html": "c8 report --reporter=html",
-    "format": "biome format . --write; ts-standard . --fix",
+    "format": "biome format . --write; eslint . --cache --fix",
     "lint": "eslint . --cache",
     "lint:fix": "eslint . --cache --fix",
     "lint:report": "eslint . --cache --format json --output-file reports/eslint.json",
     "release": "release-it",
     "typedoc": "bun typedoc.mjs",
     "prepublishOnly": "bun run build:prod"
-  },
-  "ts-standard": {
-    "globals": [
-      "describe",
-      "test",
-      "afterAll",
-      "beforeAll",
-      "afterEach",
-      "beforeEach"
-    ]
   },
   "repository": {
     "type": "git",
@@ -104,11 +94,11 @@
     "eslint": "^8.56.0",
     "eslint-config-standard": "^17.1.0",
     "eslint-config-standard-with-typescript": "^43.0.0",
-    "eslint-define-config": "^2.0.0",
+    "eslint-define-config": "^2.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^46.9.1",
-    "eslint-plugin-n": "^16.5.0",
+    "eslint-plugin-jsdoc": "^46.10.1",
+    "eslint-plugin-n": "^16.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-spellcheck": "^0.0.20",
     "eslint-plugin-tsdoc": "^0.2.17",
@@ -118,8 +108,7 @@
     "prettier": "^3.1.1",
     "release-it": "^17.0.1",
     "rimraf": "^5.0.5",
-    "ts-standard": "^12.0.2",
-    "typedoc": "^0.25.4"
+    "typedoc": "^0.25.5"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"
