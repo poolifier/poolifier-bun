@@ -51,8 +51,8 @@ export class WorkerChoiceStrategyContext<
     private workerChoiceStrategy: WorkerChoiceStrategy = WorkerChoiceStrategies.ROUND_ROBIN,
     private opts: WorkerChoiceStrategyOptions = DEFAULT_WORKER_CHOICE_STRATEGY_OPTIONS
   ) {
-    this.opts = { ...DEFAULT_WORKER_CHOICE_STRATEGY_OPTIONS, ...opts }
     this.execute = this.execute.bind(this)
+    this.opts = { ...DEFAULT_WORKER_CHOICE_STRATEGY_OPTIONS, ...opts }
     this.workerChoiceStrategies = new Map<
     WorkerChoiceStrategy,
     IWorkerChoiceStrategy

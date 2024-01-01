@@ -85,8 +85,8 @@
     "@commitlint/config-conventional": "^18.4.3",
     "@release-it/bumper": "^6.0.1",
     "@release-it/keep-a-changelog": "^5.0.0",
-    "@typescript-eslint/eslint-plugin": "^6.16.0",
-    "@typescript-eslint/parser": "^6.16.0",
+    "@typescript-eslint/eslint-plugin": "^6.17.0",
+    "@typescript-eslint/parser": "^6.17.0",
     "benchmark": "^2.1.4",
     "bun-types": "latest",
     "c8": "^8.0.1",
@@ -97,7 +97,7 @@
     "eslint-define-config": "^2.1.0",
     "eslint-import-resolver-typescript": "^3.6.1",
     "eslint-plugin-import": "^2.29.1",
-    "eslint-plugin-jsdoc": "^46.10.1",
+    "eslint-plugin-jsdoc": "^47.0.2",
     "eslint-plugin-n": "^16.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "eslint-plugin-spellcheck": "^0.0.20",
@@ -108,7 +108,7 @@
     "prettier": "^3.1.1",
     "release-it": "^17.0.1",
     "rimraf": "^5.0.5",
-    "typedoc": "^0.25.5"
+    "typedoc": "^0.25.6"
   },
   "peerDependencies": {
     "typescript": "^5.2.2"
