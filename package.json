@@ -81,7 +81,7 @@
   "files": ["lib"],
   "devDependencies": {
     "@biomejs/biome": "^1.4.1",
-    "@commitlint/cli": "^18.4.3",
+    "@commitlint/cli": "^18.4.4",
     "@commitlint/config-conventional": "^18.4.3",
     "@release-it/bumper": "^6.0.1",
     "@release-it/keep-a-changelog": "^5.0.0",
