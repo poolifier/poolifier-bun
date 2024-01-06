@@ -46,7 +46,7 @@ export class RoundRobinWorkerChoiceStrategy<
     const chosenWorkerNodeKey = this.nextWorkerNodeKey
     this.setPreviousWorkerNodeKey(chosenWorkerNodeKey)
     this.roundRobinNextWorkerNodeKey()
-    this.checkNextWorkerNodeReadiness()
+    this.checkNextWorkerNodeKey()
     return chosenWorkerNodeKey
   }
 
@@ -54,6 +54,7 @@ export class RoundRobinWorkerChoiceStrategy<
   public remove (workerNodeKey: number): boolean {
     if (this.pool.workerNodes.length === 0) {
       this.reset()
+      return true
     }
     if (
       this.nextWorkerNodeKey === workerNodeKey &&

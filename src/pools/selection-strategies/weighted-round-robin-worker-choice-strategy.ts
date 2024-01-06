@@ -44,7 +44,7 @@ export class WeightedRoundRobinWorkerChoiceStrategy<
   /**
    * Worker node virtual task runtime.
    */
-  private workerNodeVirtualTaskRunTime: number = 0
+  private workerNodeVirtualTaskRunTime = 0
 
   /** @inheritDoc */
   public constructor (
@@ -72,7 +72,7 @@ export class WeightedRoundRobinWorkerChoiceStrategy<
   public choose (): number | undefined {
     this.setPreviousWorkerNodeKey(this.nextWorkerNodeKey)
     this.weightedRoundRobinNextWorkerNodeKey()
-    this.checkNextWorkerNodeReadiness()
+    this.checkNextWorkerNodeKey()
     return this.nextWorkerNodeKey
   }
 
@@ -80,6 +80,7 @@ export class WeightedRoundRobinWorkerChoiceStrategy<
   public remove (workerNodeKey: number): boolean {
     if (this.pool.workerNodes.length === 0) {
       this.reset()
+      return true
     }
     if (this.nextWorkerNodeKey === workerNodeKey) {
       this.workerNodeVirtualTaskRunTime = 0

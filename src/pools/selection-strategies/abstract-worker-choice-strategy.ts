@@ -33,7 +33,7 @@ export abstract class AbstractWorkerChoiceStrategy<
   /**
    * The previous worker node key.
    */
-  protected previousWorkerNodeKey: number = 0
+  protected previousWorkerNodeKey = 0
 
   /** @inheritDoc */
   public readonly strategyPolicy: StrategyPolicy = {
@@ -127,10 +127,14 @@ export abstract class AbstractWorkerChoiceStrategy<
   }
 
   /**
-   * Check the next worker node readiness.
+   * Check the next worker node key.
    */
-  protected checkNextWorkerNodeReadiness (): void {
-    if (!this.isWorkerNodeReady(this.nextWorkerNodeKey as number)) {
+  protected checkNextWorkerNodeKey (): void {
+    if (
+      this.nextWorkerNodeKey != null &&
+      (this.nextWorkerNodeKey < 0 ||
+        !this.isWorkerNodeReady(this.nextWorkerNodeKey))
+    ) {
       delete this.nextWorkerNodeKey
     }
   }
@@ -183,7 +187,10 @@ export abstract class AbstractWorkerChoiceStrategy<
    * @param workerNodeKey - The worker node key.
    */
   protected setPreviousWorkerNodeKey (workerNodeKey: number | undefined): void {
-    this.previousWorkerNodeKey = workerNodeKey ?? this.previousWorkerNodeKey
+    this.previousWorkerNodeKey =
+      workerNodeKey != null && workerNodeKey >= 0
+        ? workerNodeKey
+        : this.previousWorkerNodeKey
   }
 
   protected computeDefaultWorkerWeight (): number {
